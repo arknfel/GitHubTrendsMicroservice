@@ -53,6 +53,15 @@ The response will be a JSON object, our targeted element is the list of reposito
               'repositories': [repo_name]
           }
   ```
+  The remapping algorithm output will look like:
+  ```python
+    langs = {
+       'lang1': {
+           'usage': 3,
+           'repositories': ['repo1', 'repo2', 'repo3']
+       }, # lang2 ...
+    }
+  ```
   - Jsonify the python dictionary:
   ```python
     msrv_res = make_response(json.dumps(langs,indent=4, sort_keys=False))
