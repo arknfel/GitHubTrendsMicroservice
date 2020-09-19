@@ -7,11 +7,11 @@ from flask import Flask, jsonify, make_response
 # Initializing the flask app
 app = Flask(__name__)
 
-# setting the IP/site and port for the host of
+# Setting the IP/site and port for the host of
 # the flask microservice 
-HOST, PORT = '127.0.0.1', 3200
+HOST, PORT = '0.0.0.0', 3000
 
-
+# Microservice worker
 @app.route("/api/v1/trends/", methods=['GET'])
 def trends():
 
@@ -20,17 +20,28 @@ def trends():
     url = f"https://api.github.com/search/repositories?q=created:>{date}&sort=stars&order=desc"
 
     res = requests.get(url) # github's response
-    repos = res.json()['items']  # a list of repositories in github's json response
 
     # Handles and returns non-ok responses from github
     if res.status_code != 200:
-        return jsonify(url=url, status_code=res.status_code)
+
+        payload = {
+            'requested_url': url,
+            'response_status_code': res.status_code,
+            'resonse_content': res.json()
+        }
+
+        payload = json.dumps(payload, indent=4, sort_keys=False)
+        msrv_res = make_response(payload)
+        msrv_res.mimetype = 'application/json'
+        return msrv_res
+
+    repos = res.json()['items']  # a list of repositories in github's json response
 
     # if there are available items returned from the github request,
     # proceed to the remapping algorithm, else, notate that no data were found.
-    if repos and len(repos) > 0:
+    if len(repos) > 0:
 
-        # remapping algorithm
+        # Remapping algorithm
 
         langs = {} # algorithm output data
 
@@ -52,18 +63,9 @@ def trends():
                     'repositories': [repo_name]
                 }
 
-        # The output will look like:
-        #
-        # langs = {
-        #    'lang1': {
-        #        'usage': 3,
-        #        'repositories': ['repo1', 'repo2', 'repo3']
-        #    }, ...
-        # }
-
         # minimal tweaks to flask's default response that holds
         # the JSON object of dict 'langs'
-        msrv_res = make_response(json.dumps(langs, indent=4, sort_keys=False))
+        msrv_res = make_response(json.dumps(langs,indent=4, sort_keys=False))
         msrv_res.mimetype = 'application/json'
         
         # returns a valid JSON object
@@ -72,7 +74,7 @@ def trends():
     # len(repos) == 0 (if repos had no elements)
     # returns a JSON object of the url and a warning message
     else:
-        return jsonify(url=url, error="No data was returned from url")
+        return jsonify(url=url, error="No repositories were returned")
 
 
 # Main Thread starts here
