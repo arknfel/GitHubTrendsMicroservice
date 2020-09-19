@@ -36,16 +36,8 @@ def trends():
 
         for repo in repos:
             # for index readability
-            lang = repo['language']
-            repo_name = repo['name']
-
-            # for repo in repos if 'language' or 'name' is a none type object,
-            # replace it with a string value 'None'
-            if lang is None:
-                lang = 'None'
-            
-            if repo_name is None:
-                repo_name = 'None'
+            lang = str(repo['language'])
+            repo_name = str(repo['name'])
 
             # if language already exists in dict 'lang',
             # append repo to it's repositories and increment it's usage by 1
@@ -71,7 +63,7 @@ def trends():
 
         # minimal tweaks to flask's default response that holds
         # the JSON object of dict 'langs'
-        msrv_res = make_response(json.dumps(langs,indent=4, sort_keys=False))
+        msrv_res = make_response(json.dumps(langs, indent=4, sort_keys=False))
         msrv_res.mimetype = 'application/json'
         
         # returns a valid JSON object
