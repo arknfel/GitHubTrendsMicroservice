@@ -6,7 +6,7 @@ A simple micro-service implementation using python flask
 
 This microservice is a running flask application thats is served by a process on a particuler host machine. The application functions synchronously therefore to achieve concurrency, multiprocesses serving multiple instances of the microservice application, will be lunched. (for future developments, I will try to implement the service using multithreading or an async module)
 
-The running flask app instance will wait for any http GET requests on the predefined end-point of the microservice "<hostname>:3200/api/v1/trends/".
+The running flask app instance will wait for any http GET requests on the predefined end-point of the microservice "hostname:3200/api/v1/trends/".
 once a request is recieved, method trends() will be executed by the flask application, method trends() works as follows:
   
   - Calculate the date of 30 day ago from now, format that date in iso-format that is suitable for github's end-point.
