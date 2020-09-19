@@ -64,5 +64,7 @@ Finally the microservice will respond to the get request made to it with the out
 
 # Future Developments
 
+- To apply loggings on the microservice.
+- Further enhancements are required for exception handeling.
 - To use docker which allows an easy deployment in a production environment.
 - Concurrency, for a great performance using minimal resources while serving high traffic. 
