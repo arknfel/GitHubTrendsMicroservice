@@ -15,8 +15,10 @@ The running flask app instance will wait for any http GET requests on the predef
     def trends():
 
         date = (datetime.now() - timedelta(30)).isoformat()
-
         url = f"https://api.github.com/search/repositories?q=created:>{date}&sort=stars&order=desc"
+
+        res = requests.get(url) # github's response
+        repos = res.json()['items']  # a list of repositories in github's json response
   ```
 The response will be a JSON object, our targeted element is the list of repositories, the list's key name is 'items', list 'items' holds repositores created in the last 30 days.
   - Iterate over 'items' while assembling the output python dict:
