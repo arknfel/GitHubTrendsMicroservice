@@ -1,7 +1,7 @@
 import requests, json
 from datetime import datetime, timedelta
 
-from flask import Flask, jsonify, make_response
+from flask import Flask, make_response
 
 
 # Remap algorithm
@@ -20,7 +20,7 @@ def remap(repos):
 
             # if language already exists in dict 'lang',
             # append repo to it's repositories and increment it's usage by 1
-            if lang in langs.keys():
+            if lang in langs:
                 langs[lang]['repositories'].append(repo_name)
                 langs[lang]['usage'] += 1
             
@@ -51,8 +51,6 @@ def trends():
 
     res = requests.get(url) # Github's response
 
-    payload = None
-
     # Handling the response from GitHub
     #
     # if the response is 'ok', call remap() to
@@ -70,8 +68,8 @@ def trends():
         }
 
     # Customising the flask response to:
-    # 1. Preserve the original order of dicts keys after jsonify.
-    # 2. Pretty-printing the output json for user readability.
+    # 1. Preserve the original order of keys after a dict jsonify.
+    # 2. Pretty-print the output json for user readability.
     msrv_res = make_response(json.dumps(payload, indent=4, sort_keys=False))
     msrv_res.mimetype = 'application/json'
 
