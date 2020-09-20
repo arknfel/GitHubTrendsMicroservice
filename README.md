@@ -34,7 +34,7 @@ The response will be a JSON object, our targeted element is the list of reposito
 
       # if language already exists in dict 'lang',
       # append repo to it's repositories and increment it's usage by 1
-      if lang in langs.keys():
+      if lang in langs:
           langs[lang]['repositories'].append(repo_name)
           langs[lang]['usage'] += 1
 
