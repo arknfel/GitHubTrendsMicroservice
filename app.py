@@ -15,8 +15,8 @@ def remap(repos):
     if repos:
         for repo in repos:
             # for index readability
-            lang = str(repo['language'])
-            repo_name = str(repo['name'])
+            lang = repo['language']
+            repo_name = repo['name']
 
             # if language already exists in dict 'lang',
             # append repo to it's repositories and increment it's usage by 1
